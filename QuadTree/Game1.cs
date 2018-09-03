@@ -14,6 +14,8 @@ namespace QuadTree
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        private static MouseState mouseState, lastMouseState;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -68,9 +70,22 @@ namespace QuadTree
 
             // TODO: Add your update logic here
             // Allows the game to exit
-            MouseState ms = Mouse.GetState();
+            mouseState = Mouse.GetState();
 
-            this.Window.Title = "(X = " + ms.X.ToString() + " , Y = " + ms.Y.ToString() + ") ";
+            // If mouse was clicked
+            if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
+            {
+                // Indicate Mouse is pressed
+                lastMouseState = mouseState;
+                
+                // Insert the point to the Quad Tree
+                this.Window.Title = "(X = " + mouseState.X.ToString() + " , Y = " + mouseState.Y.ToString() + ") ";
+
+            } else if (lastMouseState.LeftButton == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Released)
+            {
+                // Indicate Mouse is released
+                lastMouseState = mouseState;
+            }
 
             base.Update(gameTime);
         }
@@ -81,11 +96,10 @@ namespace QuadTree
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            Vector2 p1, p2;
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-
-            // TODO Start - Put your code here
-            Vector2 p1, p2;
 
             // TODO Start - Put your code here
             p1 = new Vector2(20, 30);
@@ -98,10 +112,9 @@ namespace QuadTree
             spriteBatch.DrawEndlessLine(p1, p2, Color.Black, 12);
             spriteBatch.DrawLine(p1, p2, Color.Yellow, 12);
 
-            // TODO End
+            spriteBatch.End();
 
             base.Draw(gameTime);
-            spriteBatch.End();
         }
 
         // C3.XNA.Sample draw primitives
