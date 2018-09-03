@@ -58,8 +58,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Images\Paddle.png" />
-    <Content Include="Content\Images\Pixel.png" />
+    <Content Include="Content\Dot16x16.png" />
+    <Content Include="Content\Dot32x32.png" />
+    <Content Include="Content\Dot64x64.png" />
+    <Content Include="Content\Pixel.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
