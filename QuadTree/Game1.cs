@@ -79,12 +79,15 @@ namespace QuadTree
                 lastMouseState = mouseState;
                 
                 // Insert the point to the Quad Tree
-                this.Window.Title = "(X = " + mouseState.X.ToString() + " , Y = " + mouseState.Y.ToString() + ") ";
+                this.Window.Title = "Pressed - (X = " + mouseState.X.ToString() + " , Y = " + mouseState.Y.ToString() + ") ";
 
-            } else if (lastMouseState.LeftButton == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Released)
+            }
+            else if (lastMouseState.LeftButton == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Released)
             {
                 // Indicate Mouse is released
                 lastMouseState = mouseState;
+
+                this.Window.Title = "Released - (X = " + mouseState.X.ToString() + " , Y = " + mouseState.Y.ToString() + ") ";
             }
 
             base.Update(gameTime);
@@ -96,21 +99,10 @@ namespace QuadTree
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            Vector2 p1, p2;
-
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
             spriteBatch.Begin();
-
             // TODO Start - Put your code here
-            p1 = new Vector2(20, 30);
-            p2 = new Vector2(200, 250);
-            spriteBatch.DrawEndlessLine(p1, p2, Color.Black, 12);
-            spriteBatch.DrawLine(p1, p2, Color.Yellow, 12);
-
-            p1 = new Vector2(100, 200);
-            p2 = new Vector2(100, 50);
-            spriteBatch.DrawEndlessLine(p1, p2, Color.Black, 12);
-            spriteBatch.DrawLine(p1, p2, Color.Yellow, 12);
 
             spriteBatch.End();
 
