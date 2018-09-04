@@ -12,14 +12,14 @@ namespace QuadTree
     /// </summary>
     class QTNode
     {
-        private List<Point> Points;
+        public List<Point> Points;
 
         public Rectangle Bounds { get; private set; }
 
-        public QTNode TopLeft { get; private set; }
-        public QTNode TopRight { get; private set; }
-        public QTNode BottomLeft { get; private set; }
-        public QTNode BottomRight { get; private set; }
+        public QTNode TopLeft { get; set; }
+        public QTNode TopRight { get; set; }
+        public QTNode BottomLeft { get; set; }
+        public QTNode BottomRight { get; set; }
 
         public int Capacity { get; private set; }
         public bool IsMaxCapacity { get { return (Points.Count == Capacity); } }
@@ -39,7 +39,7 @@ namespace QuadTree
             this.BottomRight = null;
         }
 
-        public bool Insert(Point point, QTNode node)
+        public bool Add(Point point)
         {
             if (!this.Bounds.Contains(point))
             {
@@ -52,7 +52,7 @@ namespace QuadTree
             return true;
         }
 
-        public bool FindQuadrant(Point point, out QTNode node)
+        public bool FindQuad(Point point, out QTNode node)
         {
             // Set initial return value
             node = null;
@@ -82,5 +82,56 @@ namespace QuadTree
 
             return true;
         }
+
+        public bool Subdivide()
+        {
+            int halfWidth = this.Bounds.Width / 2;
+            int halfHeight = this.Bounds.Height / 2;
+
+            // Subdivide current node
+            TopLeft = new QTNode(new Rectangle(Bounds.Top, Bounds.Left, halfWidth, halfHeight), node.Capacity);
+            TopRight = new QTNode(new Rectangle(Bounds.Top, Bounds.Left + halfWidth, halfWidth, halfHeight), node.Capacity);
+            BottomLeft = new QTNode(new Rectangle(Bounds.Top + halfHeight, Bounds.Left, halfWidth, halfHeight), node.Capacity);
+            BottomRight = new QTNode(new Rectangle(Bounds.Top + halfHeight, Bounds.Left + halfWidth, halfWidth, halfHeight), node.Capacity);
+
+            // insert the current points to the right quadrant
+            foreach (var point in Points)
+            {
+                if (!FindQuad(point, out QTNode tmpNode))
+                {
+                    Console.WriteLine("Error:: QuadTree.Insert:: Error inserting point to tree");
+                    return false;
+                }
+
+                tmpNode.Add(point);
+            }
+
+            this.Points.Clear();
+            this.IsLeaf = false;
+
+            // Success
+            return true;
+        }
+
+        //public bool FindQuad(Point point, out QTNode node)
+        //{
+        //    QTNode tmpNode;
+
+        //    // Set initial return value
+        //    node = null;
+
+        //    if (QTRoot == null)
+        //        return false;
+
+        //    tmpNode = QTRoot;
+
+        //    while (!tmpNode.IsLeaf)
+        //    {
+        //        tmpNode.FindQuadrant(point, out tmpNode);
+        //    }
+
+        //    return true;
+        //}
+
     }
 }

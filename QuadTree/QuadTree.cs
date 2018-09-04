@@ -28,36 +28,33 @@ namespace QuadTree
 
         public bool Insert(Point point)
         {
-            QTNode tmpNode = null;
-
-            if (!FindNode(point, out tmpNode))
-            {
-                Console.WriteLine("Error:: QuadTree.Insert:: Error inserting point to tree");
-                return false;
-            }
-
-            if (tmpNode.IsMaxCapacity)
-            {
-                // Split Node
-            }
-            return true;
+            return Insert(point, QTRoot);
         }
 
-        public bool FindNode(Point point, out QTNode node)
+        public bool Insert(Point point, QTNode node)
         {
-            QTNode tmpNode;
-
-            // Set initial return value
-            node = null;
-
-            if (QTRoot == null)
+            if (!node.Bounds.Contains(point))
                 return false;
 
-            tmpNode = QTRoot;
-
-            while (!tmpNode.IsLeaf)
+            if (node.IsLeaf)
             {
-                tmpNode.FindQuadrant(point, out tmpNode);
+                if (!node.IsMaxCapacity)
+                {
+                    node.Add(point);
+                }
+                else
+                {
+                    // Subdivide Node - Recursivly subdivide the current node to quadrants
+                    node.Subdivide();
+                }
+                return true;
+            }
+
+            // Recursivly reinsert the last point to the right quad.
+            // As a result if needed will Subdivide again.
+            if (node.FindQuad(point, out QTNode quad))
+            {
+                return Insert(point, quad);
             }
 
             return true;
