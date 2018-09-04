@@ -19,7 +19,7 @@ namespace QuadTree
         private readonly List<Point> QTPoints = new List<Point>();
 
         private QuadTree QT = null;
-        private static readonly int qtCapacity = 5;
+        private static readonly int qtCapacity = 1;
 
         private static MouseState mouseState, lastMouseState;
 
@@ -127,7 +127,7 @@ namespace QuadTree
 
             foreach (var point in QTPoints)
             {
-                spriteBatch.PutDot(point.ToVector2(), Color.Yellow, 3);
+                spriteBatch.PutDot(point.ToVector2(), Color.Yellow, 5);
             }
             spriteBatch.End();
 
