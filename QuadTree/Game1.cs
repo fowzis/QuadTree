@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using C3.XNA;
 using System;
+using System.Collections.Generic;
 
 namespace QuadTree
 {
@@ -13,6 +14,12 @@ namespace QuadTree
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Viewport screenBounds;
+
+        private readonly List<Point> QTPoints = new List<Point>();
+
+        private QuadTree QT = null;
+        private static readonly int qtCapacity = 5;
 
         private static MouseState mouseState, lastMouseState;
 
@@ -32,6 +39,9 @@ namespace QuadTree
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            screenBounds = graphics.GraphicsDevice.Viewport;
+
+            QT = new QuadTree(screenBounds.Bounds, qtCapacity);
 
             base.Initialize();
         }
@@ -81,6 +91,8 @@ namespace QuadTree
                 // Insert the point to the Quad Tree
                 this.Window.Title = "Pressed - (X = " + mouseState.X.ToString() + " , Y = " + mouseState.Y.ToString() + ") ";
 
+                QTPoints.Add(mouseState.Position);
+                QT.Insert(mouseState.Position);
             }
             else if (lastMouseState.LeftButton == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Released)
             {
@@ -99,11 +111,24 @@ namespace QuadTree
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);  // Color.CornflowerBlue
+            List<Rectangle> recList = null;
 
-            spriteBatch.Begin();
             // TODO Start - Put your code here
+            spriteBatch.Begin();
+            recList = QT.GetRectangles();
+            if (recList != null)
+            {
+                foreach (var rec in recList)
+                {
+                    spriteBatch.DrawRectangle(rec, Color.Red);
+                }
+            }
 
+            foreach (var point in QTPoints)
+            {
+                spriteBatch.PutDot(point.ToVector2(), Color.Yellow, 3);
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);

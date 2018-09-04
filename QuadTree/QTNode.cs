@@ -63,12 +63,6 @@ namespace QuadTree
                 return false;
             }
 
-            //if (IsLeaf)
-            //{
-            //    node = this;    // return self reference
-            //    return true;
-            //}
-
             if (TopLeft.Bounds.Contains(point))
                 node = TopLeft;
             else if (TopRight.Bounds.Contains(point))
@@ -89,10 +83,10 @@ namespace QuadTree
             int halfHeight = this.Bounds.Height / 2;
 
             // Subdivide current node
-            TopLeft = new QTNode(new Rectangle(Bounds.Top, Bounds.Left, halfWidth, halfHeight), node.Capacity);
-            TopRight = new QTNode(new Rectangle(Bounds.Top, Bounds.Left + halfWidth, halfWidth, halfHeight), node.Capacity);
-            BottomLeft = new QTNode(new Rectangle(Bounds.Top + halfHeight, Bounds.Left, halfWidth, halfHeight), node.Capacity);
-            BottomRight = new QTNode(new Rectangle(Bounds.Top + halfHeight, Bounds.Left + halfWidth, halfWidth, halfHeight), node.Capacity);
+            TopLeft = new QTNode(new Rectangle(Bounds.X, Bounds.Y, halfWidth, halfHeight), Capacity);
+            TopRight = new QTNode(new Rectangle(Bounds.X + halfWidth, Bounds.Y, halfWidth, halfHeight), Capacity);
+            BottomLeft = new QTNode(new Rectangle(Bounds.X, Bounds.Y + halfHeight, halfWidth, halfHeight), Capacity);
+            BottomRight = new QTNode(new Rectangle(Bounds.X + halfWidth, Bounds.Y + halfHeight, halfWidth, halfHeight), Capacity);
 
             // insert the current points to the right quadrant
             foreach (var point in Points)
@@ -112,26 +106,5 @@ namespace QuadTree
             // Success
             return true;
         }
-
-        //public bool FindQuad(Point point, out QTNode node)
-        //{
-        //    QTNode tmpNode;
-
-        //    // Set initial return value
-        //    node = null;
-
-        //    if (QTRoot == null)
-        //        return false;
-
-        //    tmpNode = QTRoot;
-
-        //    while (!tmpNode.IsLeaf)
-        //    {
-        //        tmpNode.FindQuadrant(point, out tmpNode);
-        //    }
-
-        //    return true;
-        //}
-
     }
 }

@@ -41,13 +41,13 @@ namespace QuadTree
                 if (!node.IsMaxCapacity)
                 {
                     node.Add(point);
+                    return true;
                 }
                 else
                 {
                     // Subdivide Node - Recursivly subdivide the current node to quadrants
                     node.Subdivide();
                 }
-                return true;
             }
 
             // Recursivly reinsert the last point to the right quad.
@@ -57,7 +57,38 @@ namespace QuadTree
                 return Insert(point, quad);
             }
 
-            return true;
+            return false;
+        }
+
+        public List<Rectangle> GetRectangles()
+        {
+            QTNode node;
+            Queue<QTNode> Q = new Queue<QTNode>();
+            List<Rectangle> recList = new List<Rectangle>();
+
+            if (QTRoot == null)
+            {
+                Console.WriteLine("Error:: QuadTree.GetRectangles:: Empty Quad Tree");
+                return null;
+            }
+
+            Q.Enqueue(QTRoot);
+
+            while (Q.Count > 0)
+            {
+                node = Q.Dequeue();
+                recList.Add(node.Bounds);
+
+                if (!node.IsLeaf)
+                {
+                    Q.Enqueue(node.TopLeft);
+                    Q.Enqueue(node.TopRight);
+                    Q.Enqueue(node.BottomLeft);
+                    Q.Enqueue(node.BottomRight);
+                }
+            }
+
+            return recList;
         }
     }
 }
