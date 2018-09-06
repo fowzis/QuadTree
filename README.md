@@ -1,6 +1,8 @@
 # QuadTree
 Visual Representation of the QuadTree algoritm
 
+The following project, is represent my implemntation of the QuadTree algorithm, while visualizing it using MonoGame framework.
+
 Quadtrees are trees used to efficiently store data of points on a two-dimensional space. In this tree, each node has at most four children.
 We can construct a quadtree from a two-dimensional area using the following steps:
 
